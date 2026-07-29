@@ -54,15 +54,6 @@ dependencies:
   # Image
   image_picker: ^1.1.2
   cached_network_image: ^3.3.1
+  path_provider: ^2.1.5
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^4.0.0
-
-flutter:
-  uses-material-design: true
-  generate: true
-
-  assets:
-    - assets/images/
