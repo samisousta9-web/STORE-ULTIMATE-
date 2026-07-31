@@ -2,23 +2,15 @@ name: Build AAB
 
 on:
   push:
-    branches: [ main, master ]
-    tags:
-      - 'v*'
+    branches: [master]
   workflow_dispatch:
 
 jobs:
-  build-aab:
+  build:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+    steps:
+      - uses: actions/checkout@v4
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -26,14 +18,11 @@ jobs:
           flutter-version: '3.24.5'
           channel: 'stable'
 
-      - name: Create local.properties
-        run: |
-          echo "flutter.sdk=${FLUTTER_ROOT}" > android/local.properties
-          echo "flutter.versionName=1.0.0" >> android/local.properties
-          echo "flutter.versionCode=${{ github.run_number }}" >> android/local.properties
-
       - name: Get dependencies
         run: flutter pub get
+
+      - name: Format code
+        run: dart format .
 
       - name: Build AAB
         run: flutter build appbundle --release
