@@ -8,7 +8,11 @@ import 'presentation/screens/splash/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await NotificationService().init();
+  try {
+    await NotificationService().init();
+  } catch (e) {
+    debugPrint('Notification init failed: $e');
+  }
   runApp(
     const ProviderScope(
       child: StoreManagerProApp(),
@@ -27,7 +31,7 @@ class StoreManagerProApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      locale: const Locale('ar'),
+      locale: WidgetsBinding.instance.platformDispatcher.locale,
       supportedLocales: const [
         Locale('ar'),
         Locale('fr'),

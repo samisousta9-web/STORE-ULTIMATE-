@@ -10,19 +10,30 @@ class EncryptionService {
 
   late final encrypt.Encrypter _encrypter;
   late final encrypt.IV _iv;
+  bool _isInitialized = false;
 
   void initialize(String masterKey) {
-    final key = encrypt.Key.fromUtf8(masterKey.padRight(32, '0').substring(0, 32));
+    final keyBytes = sha256.convert(utf8.encode(masterKey)).bytes;
+    final key = encrypt.Key(Uint8List.fromList(keyBytes));
+    // استخدم IV ثابت مشتق من المفتاح أو احفظه مع البيانات
     _iv = encrypt.IV.fromLength(16);
     _encrypter = encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.cbc));
+    _isInitialized = true;
   }
 
   String encryptText(String plainText) {
-    return _encrypter.encrypt(plainText, iv: _iv).base64;
+    if (!_isInitialized) throw StateError('EncryptionService not initialized');
+    final encrypted = _encrypter.encrypt(plainText, iv: _iv);
+    // احفظ IV مع النص المشفر (Base64)
+    return '${_iv.base64}:${encrypted.base64}';
   }
 
   String decryptText(String encryptedText) {
-    return _encrypter.decrypt64(encryptedText, iv: _iv);
+    if (!_isInitialized) throw StateError('EncryptionService not initialized');
+    final parts = encryptedText.split(':');
+    if (parts.length != 2) throw FormatError('Invalid encrypted format');
+    final iv = encrypt.IV.fromBase64(parts[0]);
+    return _encrypter.decrypt64(parts[1], iv: iv);
   }
 
   String hashPassword(String password) {

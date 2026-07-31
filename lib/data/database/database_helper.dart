@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../../core/constants/app_constants.dart';
+import '../../core/services/encryption_service.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -24,10 +25,13 @@ class DatabaseHelper {
       version: AppConstants.dbVersion,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
+      onConfigure: (db) async {
+        await db.execute('PRAGMA foreign_keys = ON');
+      },
     );
   }
 
-  Future<void> _onCreate(Database db, int version) async {
+  Future _onCreate(Database db, int version) async {
     // Users Table
     await db.execute('''
       CREATE TABLE users (
@@ -258,7 +262,6 @@ class DatabaseHelper {
       )
     ''');
 
-
     // Companies Table
     await db.execute('''
       CREATE TABLE companies (
@@ -429,10 +432,10 @@ class DatabaseHelper {
       'createdAt': DateTime.now().toIso8601String(),
     });
 
-    // Insert default admin user
+    // Insert default admin user with HASHED password
     await db.insert('users', {
       'username': 'admin',
-      'password': 'admin123',
+      'password': EncryptionService().hashPassword('admin123'),
       'fullName': 'Sami Banouh',
       'email': 'banouhsami13@gmail.com',
       'phone': '0782918108',
@@ -453,11 +456,11 @@ class DatabaseHelper {
     });
   }
 
-  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
     // Handle database upgrades here
   }
 
-  Future<void> close() async {
+  Future close() async {
     final db = await database;
     await db.close();
     _database = null;

@@ -52,19 +52,19 @@ class UserModel {
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      id: map['id'],
-      username: map['username'],
-      password: map['password'],
-      fullName: map['fullName'],
-      email: map['email'],
-      phone: map['phone'],
-      role: map['role'],
-      avatar: map['avatar'],
+      id: map['id'] as int?,
+      username: map['username'] as String,
+      password: map['password'] as String,
+      fullName: map['fullName'] as String,
+      email: map['email'] as String,
+      phone: map['phone'] as String,
+      role: map['role'] as String,
+      avatar: map['avatar'] as String?,
       isActive: map['isActive'] == 1,
       useFingerprint: map['useFingerprint'] == 1,
-      pin: map['pin'],
-      createdAt: DateTime.parse(map['createdAt']),
-      lastLogin: map['lastLogin'] != null ? DateTime.parse(map['lastLogin']) : null,
+      pin: map['pin'] as String?,
+      createdAt: DateTime.tryParse(map['createdAt']) ?? DateTime.now(),
+      lastLogin: map['lastLogin'] != null ? DateTime.tryParse(map['lastLogin']) : null,
       permissions: map['permissions']?.toString().split(',').where((s) => s.isNotEmpty).toList() ?? [],
     );
   }
