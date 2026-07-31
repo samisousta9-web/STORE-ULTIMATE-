@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.banouhsami.store_manager_pro"
-    compileSdkVersion 35
+    compileSdk 34
     ndkVersion "25.1.8937393"
 
     compileOptions {
@@ -42,7 +42,7 @@ android {
 
     defaultConfig {
         applicationId "com.banouhsami.store_manager_pro"
-        minSdkVersion 23
+        minSdk 24
         targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -69,4 +69,5 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'com.google.android.material:material:1.12.0'
 }
