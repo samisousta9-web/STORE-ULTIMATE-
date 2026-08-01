@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.banouhsami.store_manager_pro"
-    compileSdk 35
+    compileSdk 34
     ndkVersion "25.1.8937393"
 
     compileOptions {
@@ -43,7 +43,7 @@ android {
     defaultConfig {
         applicationId "com.banouhsami.store_manager_pro"
         minSdk 24
-        targetSdkVersion 35
+        targetSdkVersion 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
