@@ -8,7 +8,7 @@
 -keep class androidx.lifecycle.** { *; }
 -dontwarn androidx.**
 
-# Google Play Core (fixes R8 missing classes)
+# Google Play Core
 -keep class com.google.android.play.core.** { *; }
 -keep class com.google.android.play.core.splitcompat.** { *; }
 -keep class com.google.android.play.core.splitinstall.** { *; }
